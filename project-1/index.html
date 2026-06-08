@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-card">
+        <h1>Expense Dashboard</h1>
+        <h2 class="balance-title">Total Expenses: $<span id="total-display">0</span></h2>
+        
+        <div class="form-group">
+            <input type="text" id="item-name" placeholder="Item Name">
+            <input type="number" id="item-amount" placeholder="Amount ($)">
+            <button id="add-button">Add Expense</button>
+            <button id="sub-button">sub Expense</button>
+        </div>
+
+        <h3>History</h3>
+        <ul id="expense-list"></ul>
+    </div>
+
+ 
+    <script>
+        
+        let totalExpenses = 0;
+        let last = null;
+
+        function add(isSub) {
+            let name = document.getElementById('item-name').value;
+            let amount = Number(document.getElementById('item-amount').value);
+
+            if (name === "" || amount === 0) return;
+
+            if (isSub === true) {
+                totalExpenses = totalExpenses - amount;
+            } else {
+                totalExpenses = totalExpenses + amount;
+            }
+            
+            document.getElementById('total-display').textContent = totalExpenses;
+
+            let li = document.createElement('li');
+            
+            if (isSub === true) {
+                li.textContent = name + " — -$" + amount;
+                li.classList.add('sub-item');
+                if (last !== null) {
+                    last.after(li);
+                } else {
+                    document.getElementById('expense-list').appendChild(li);
+                }
+            } else {
+                li.textContent = name + " — $" + amount;
+                document.getElementById('expense-list').appendChild(li);
+                last = li;
+            }
+
+            document.getElementById('item-name').value = "";
+            document.getElementById('item-amount').value = "";
+        }
+
+        document.getElementById('add-button').onclick = function() { add(false); };
+        document.getElementById('sub-button').onclick = function() { add(true); };
+    </script>
+</body>
+</html>
+
+
+   
